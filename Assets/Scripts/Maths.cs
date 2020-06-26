@@ -15,4 +15,13 @@ public static class Maths
         if (value >= targetValue - threshold && value <= targetValue + threshold) return true;
         return false;
     }
+
+    public static Quaternion VelocityToRotation(Vector3 velocity)
+    {
+
+        Vector3 rotation = new Vector3();
+        rotation.y = Mathf.Tan(velocity.z / velocity.x);
+
+        return Quaternion.Euler(rotation);
+    }
 }

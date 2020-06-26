@@ -12,6 +12,9 @@ public class TankPlayer : Tank
     public float _turnSpeed = 3;
     public float _movePointDistance = 0.5f;
 
+    public delegate void OnUpdateDebugDataEvent(float navVel, float navAcc);
+    public static event OnUpdateDebugDataEvent onUpdateDebugData;
+
     protected override void Awake()
     {
         base.Awake();
@@ -30,9 +33,12 @@ public class TankPlayer : Tank
 
         if (Input.GetKey(KeyCode.W)) MoveToPosition(_movePointForward);
         if (Input.GetKey(KeyCode.S)) MoveToPosition(_movePointBack);
+
+        if (onUpdateDebugData != null) 
+            onUpdateDebugData(_navMeshAgent.velocity.magnitude, _navMeshAgent.acceleration);
     }
 
-    protected override void OnDrawGizmos()
+    /* protected override void OnDrawGizmos()
     {
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(transform.position, 0.05f);
@@ -52,5 +58,5 @@ public class TankPlayer : Tank
     {
         GUI.Label(new Rect(10, 10, 512, 20), $"_navMeshAgent.velocity.magnitude = {_navMeshAgent.velocity.magnitude}");
         GUI.Label(new Rect(10, 30, 512, 20), $"_navMeshAgent.acceleration = {_navMeshAgent.acceleration}");
-    }
+    } */
 }

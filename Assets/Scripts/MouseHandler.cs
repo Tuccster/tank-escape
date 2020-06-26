@@ -13,12 +13,8 @@ public class MouseHandler : MonoBehaviour
         _camera = Registry.GetRegister<Camera>("camera");
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        //Vector3 mousePosition = Input.mousePosition;
-        //mousePosition.z = _camera.nearClipPlane;
-
-        //_player.AimAt(_camera.ScreenToWorldPoint(mousePosition));
-        //Debug.Log(_camera.ScreenToWorldPoint(mousePosition));
+        _player.AimAt(_camera.ScreenToWorldPoint(Input.mousePosition));
     }
 }
