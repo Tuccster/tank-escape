@@ -16,12 +16,12 @@ public static class Maths
         return false;
     }
 
-    public static Quaternion VelocityToRotation(Vector3 velocity)
+    public static Vector3 CalculateProjectileVelocity(Vector3 initPos, Vector3 target, float vertDisplacement, float gravity = -9.81f) // Sabastian Lague
     {
-
-        Vector3 rotation = new Vector3();
-        rotation.y = Mathf.Tan(velocity.z / velocity.x);
-
-        return Quaternion.Euler(rotation);
+        float displacementY = target.y - initPos.y;
+        Vector3 displancementXZ = new Vector3(target.x - initPos.x, 0, target.z - initPos.z);
+        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * vertDisplacement);
+        Vector3 velocityZX = displancementXZ / (Mathf.Sqrt(-2 * vertDisplacement / gravity) + Mathf.Sqrt(2 * (displacementY - vertDisplacement) / gravity));
+        return velocityZX + velocityY;
     }
 }

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public class MouseHandler : MonoBehaviour
 {
-    Tank _player;
-    Camera _camera;
+    private Tank _player;
+    private Camera _camera;
+
+    private Vector3 _mouseWorldPos;
 
     private void Start()
     {
@@ -15,6 +17,20 @@ public class MouseHandler : MonoBehaviour
 
     private void Update()
     {
-        _player.AimAt(_camera.ScreenToWorldPoint(Input.mousePosition));
+        Ray ray = _camera.ScreenPointToRay(Input.mousePosition);
+        RaycastHit raycastHit;
+        if (Physics.Raycast(ray, out raycastHit))
+        {
+            _mouseWorldPos = raycastHit.point;
+        }
+        _player.AimAt(_mouseWorldPos);
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!GameRules._drawOnDrawGizmos) return;
+
+        Gizmos.color = Color.cyan;
+        Gizmos.DrawSphere(_mouseWorldPos, 0.1f);
     }
 }

@@ -38,8 +38,10 @@ public class TankPlayer : Tank
             onUpdateDebugData(_navMeshAgent.velocity.magnitude, _navMeshAgent.acceleration);
     }
 
-    /* protected override void OnDrawGizmos()
+    protected override void OnDrawGizmos()
     {
+        if (!GameRules._drawOnDrawGizmos) return;
+
         Gizmos.color = Color.blue;
         Gizmos.DrawSphere(transform.position, 0.05f);
 
@@ -56,7 +58,9 @@ public class TankPlayer : Tank
     // Should be put in "debug_display" in the registry **KEEP IT SIMPLE**
     void OnGUI()
     {
+        if (!GameRules._drawOnGUI) return;
+
         GUI.Label(new Rect(10, 10, 512, 20), $"_navMeshAgent.velocity.magnitude = {_navMeshAgent.velocity.magnitude}");
         GUI.Label(new Rect(10, 30, 512, 20), $"_navMeshAgent.acceleration = {_navMeshAgent.acceleration}");
-    } */
+    }
 }

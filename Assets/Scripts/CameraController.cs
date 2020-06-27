@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     private Transform _transform;
     private Transform _target;
 
-    IEnumerator _followTarget;
+    private IEnumerator _followTarget;
 
     private void Awake()
     {
@@ -28,9 +28,12 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollValue > 0f) _camera.transform.position += _camera.transform.forward * 1;
-        if (scrollValue < 0f) _camera.transform.position += _camera.transform.forward * -1;
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+            if (scrollValue > 0f) _camera.transform.position += _camera.transform.forward * 1;
+            if (scrollValue < 0f) _camera.transform.position += _camera.transform.forward * -1;
+        }
     }
 
     public void SetTarget(Transform target)

@@ -558,6 +558,8 @@ MonoBehaviour:
   _turretTrans: {fileID: 123720511}
   _barrelTrans: {fileID: 906620702}
   _shootPoint: {fileID: 57082925}
+  _aimDistMin: 1
+  _aimDistMax: 16
   _stoppingDistance: 0.26
   _turnSpeed: 180
   _movePointDistance: 0.5
@@ -857,6 +859,8 @@ MonoBehaviour:
   _turretTrans: {fileID: 152372925}
   _barrelTrans: {fileID: 1389753982}
   _shootPoint: {fileID: 0}
+  _aimDistMin: 0
+  _aimDistMax: 0
 --- !u!195 &702940691
 NavMeshAgent:
   m_ObjectHideFlags: 0

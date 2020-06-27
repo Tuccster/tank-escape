@@ -19,7 +19,10 @@ public class Tank : MonoBehaviour
     protected LineRenderer _lineRenderer;
 
     private Vector3 _barrelLookAtTarget;
-    protected float _vertDisplacement = 5;
+    protected float _vertDisplacement = 0.25f;
+
+    private Vector3 _targetPosition;
+    public float _aimDistMin, _aimDistMax;
 
     public delegate void OnRotateEvent(Quaternion rotation);
     public static event OnRotateEvent onRotateEvent;
@@ -35,14 +38,12 @@ public class Tank : MonoBehaviour
     {
         if (onRotateEvent != null) onRotateEvent(_transform.rotation);
 
-        //AimAt(_target.position);
+        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollValue > 0f) _vertDisplacement += 0.25f;
+        if (scrollValue < 0f) _vertDisplacement -= 0.25f;
+        _vertDisplacement = Mathf.Clamp(_vertDisplacement, 0, 5f);
 
-        if (Input.GetKeyDown(KeyCode.F)) 
-        {
-            GameObject newProjectile = Instantiate(_projectile, _shootPoint.position, Quaternion.identity);
-            Rigidbody projRigidbody = newProjectile.GetComponent<Rigidbody>();
-            projRigidbody.velocity = CalculateProjectileVelocity();
-        }
+        if (Input.GetKeyDown(KeyCode.F)) ShootProjectile();
     }
 
     public void MoveToPosition(Vector3 position)
@@ -50,21 +51,12 @@ public class Tank : MonoBehaviour
         _navMeshAgent.SetDestination(position);
     }
 
-    public Vector3 CalculateProjectileVelocity() // Thanks, Sabastian
-    {
-        float gravity = Physics.gravity.y;
-        float displacementY = _target.position.y - _shootPoint.position.y;
-        Vector3 displancementXZ = new Vector3(_target.position.x - _shootPoint.position.x, 0, _target.position.z - _shootPoint.position.z);
-        Vector3 velocityY = Vector3.up * Mathf.Sqrt(-2 * gravity * _vertDisplacement);
-        Vector3 velocityZX = displancementXZ / (Mathf.Sqrt(-2 * _vertDisplacement / gravity) + Mathf.Sqrt(2 * (displacementY - _vertDisplacement) / gravity));
-        return velocityZX + velocityY;
-    }
-
     public void AimAt(Vector3 position)
     {
-        Vector3 velocity = CalculateProjectileVelocity();
+        _targetPosition = position;
+        Vector3 velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
 
-        _turretTrans.LookAt(_target);
+        _turretTrans.LookAt(_targetPosition);
         _turretTrans.rotation = Quaternion.Euler(0, _turretTrans.rotation.eulerAngles.y, 0);
 
         _barrelLookAtTarget = _shootPoint.position + (velocity * 0.05f);
@@ -72,8 +64,20 @@ public class Tank : MonoBehaviour
         _barrelTrans.rotation = Quaternion.Euler(_barrelTrans.rotation.eulerAngles.x, _turretTrans.rotation.eulerAngles.y, 0);
     }
 
+    public void ShootProjectile()
+    {
+        float distToPos = Vector3.Distance(_transform.position, _targetPosition);
+        if (distToPos < _aimDistMin || distToPos > _aimDistMax) return;
+
+        GameObject newProjectile = Instantiate(_projectile, _shootPoint.position, Quaternion.identity);
+        Rigidbody projRigidbody = newProjectile.GetComponent<Rigidbody>();
+        projRigidbody.velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
+    }
+
     protected virtual void OnDrawGizmos()
     {
+        if (!GameRules._drawOnDrawGizmos) return;
+
         if (_navMeshAgent != null)
         {
             Gizmos.color = Color.yellow;
@@ -86,6 +90,10 @@ public class Tank : MonoBehaviour
         Gizmos.color = Color.blue;
         Gizmos.DrawLine(_barrelTrans.position, _barrelLookAtTarget);
         Gizmos.color = Color.green;
-        Gizmos.DrawLine(_turretTrans.position, _turretTrans.position + (_turretTrans.forward * 2));
+        Gizmos.DrawLine(_turretTrans.position, _turretTrans.position + _turretTrans.forward);
+
+        Gizmos.color = new Color(1, 0, 0, 0.2f);
+        Gizmos.DrawWireSphere(_transform.position, _aimDistMin);
+        Gizmos.DrawWireSphere(_transform.position, _aimDistMax);
     }
 }
