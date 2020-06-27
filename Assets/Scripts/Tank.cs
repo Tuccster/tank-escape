@@ -3,13 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-
-[RequireComponent(typeof(LineRenderer))]
 [RequireComponent(typeof(NavMeshAgent))]
 public class Tank : MonoBehaviour
 {
     public GameObject _projectile;
-    public Transform _target;
 
     [SerializeField]
     protected Transform _bodyTrans, _turretTrans, _barrelTrans, _shootPoint;
@@ -37,13 +34,6 @@ public class Tank : MonoBehaviour
     protected virtual void Update()
     {
         if (onRotateEvent != null) onRotateEvent(_transform.rotation);
-
-        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollValue > 0f) _vertDisplacement += 0.25f;
-        if (scrollValue < 0f) _vertDisplacement -= 0.25f;
-        _vertDisplacement = Mathf.Clamp(_vertDisplacement, 0, 5f);
-
-        if (Input.GetKeyDown(KeyCode.F)) ShootProjectile();
     }
 
     public void MoveToPosition(Vector3 position)

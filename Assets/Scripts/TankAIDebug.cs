@@ -2,25 +2,18 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class TankAIDebug : Tank
+public class TankAIDebug : TankAI
 {
-    private Camera _camera;
-
-    private void Start()
+    protected override void Start()
     {
-        _camera = Registry.GetRegister<Camera>("camera");
-    }
+        base.Start();
 
-    protected override void Awake()
-    {
-        
-    }
+        AddTask(MoveTo(new Vector3(0, 0, 20)));
+        AddTask(MoveTo(new Vector3(0, 0, -20)));
+        AddTask(MoveTo(new Vector3(0, 0, 20)));
 
-    protected override void Update()
-    {
-        if (Input.GetKeyDown(KeyCode.Mouse0))
-        {
-            MoveToPosition(_camera.ViewportToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, 2)));
-        }
+        //AddTask(MoveToRandom(Vector3.zero, 8), 1000);
+
+        StartTaskList();
     }
 }

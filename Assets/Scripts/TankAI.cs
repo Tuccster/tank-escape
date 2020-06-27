@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class TankAI : Tank
 {
@@ -8,15 +9,25 @@ public class TankAI : Tank
     private List<IEnumerator> _taskList = new List<IEnumerator>();
     private bool _taskListRunning = false;
     private bool _currentTaskRunning = false;
+    private TankPlayer _player;
 
-    public void AddTask(IEnumerator task)
+    protected virtual void Start()
+    {
+        _player = Registry.GetRegister<TankPlayer>("player");
+    }
+
+    public void AddTask(IEnumerator task, int amount = 1)
     {
         if (_taskListRunning)
         {
             Debug.LogError("Cannot add tasks while task list is running.");
             return;
         }
-        _taskList.Add(task);
+        for (int i = 0; i < amount; i++)
+        {
+            _taskList.Add(task);
+            Debug.Log(task);
+        }
     }
 
     public void StartTaskList()
@@ -39,8 +50,9 @@ public class TankAI : Tank
 
             while(_currentTaskRunning)
             {
-                yield return new WaitForFixedUpdate();
+                yield return new WaitForEndOfFrame();
             }
+            StopCoroutine(_taskList[i]);
         }
         _taskListRunning = false;
     }
@@ -50,9 +62,26 @@ public class TankAI : Tank
     public IEnumerator MoveTo(Vector3 position)
     {
         MoveToPosition(position);
-        while(_navMeshAgent.remainingDistance < 0.25f)
+        yield return new WaitForEndOfFrame(); // Needed so that remaining distance can be calculated
+
+        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= 0.25f)
         {
-            yield return new WaitForFixedUpdate();
+            yield return new WaitForEndOfFrame();
+        }
+        _currentTaskRunning = false;
+    }
+
+    public IEnumerator MoveToRandom(Vector3 position, float radius)
+    {
+        Vector3 direction = position + (Random.insideUnitSphere * radius);
+        NavMeshHit hit;
+        NavMesh.SamplePosition(direction, out hit, radius, 1);
+        MoveToPosition(hit.position);
+        yield return new WaitForEndOfFrame(); // Needed so that remaining distance can be calculated
+
+        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= 0.25f)
+        {
+            yield return new WaitForEndOfFrame();
         }
         _currentTaskRunning = false;
     }
