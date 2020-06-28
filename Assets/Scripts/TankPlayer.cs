@@ -37,11 +37,6 @@ public class TankPlayer : Tank
         if (onUpdateDebugData != null) 
             onUpdateDebugData(_navMeshAgent.velocity.magnitude, _navMeshAgent.acceleration);
 
-        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
-        if (scrollValue > 0f) _vertDisplacement += 0.25f;
-        if (scrollValue < 0f) _vertDisplacement -= 0.25f;
-        _vertDisplacement = Mathf.Clamp(_vertDisplacement, 0, 5f);
-
         if (Input.GetKeyDown(KeyCode.F)) ShootProjectile();
     }
 

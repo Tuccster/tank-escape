@@ -16,7 +16,8 @@ public class Tank : MonoBehaviour
     protected LineRenderer _lineRenderer;
 
     private Vector3 _barrelLookAtTarget;
-    protected float _vertDisplacement = 0.25f;
+    private float _vertDisplacement = 0.0005f;
+    private float _vertDisplacementMax = 1;
 
     private Vector3 _targetPosition;
     public float _aimDistMin, _aimDistMax;
@@ -43,13 +44,19 @@ public class Tank : MonoBehaviour
 
     public void AimAt(Vector3 position)
     {
+        Vector3 direction = position - _transform.position;
+        direction.Normalize();
+        float percentage = Vector3.Distance(_transform.position + (direction * _aimDistMin), position) / _aimDistMax;
+        _vertDisplacement = Mathf.Clamp(percentage * _vertDisplacementMax, 0, _vertDisplacementMax);
+        Debug.Log(_vertDisplacement);
+
         _targetPosition = position;
         Vector3 velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
 
         _turretTrans.LookAt(_targetPosition);
         _turretTrans.rotation = Quaternion.Euler(0, _turretTrans.rotation.eulerAngles.y, 0);
 
-        _barrelLookAtTarget = _shootPoint.position + (velocity * 0.05f);
+        _barrelLookAtTarget = _shootPoint.position + (velocity * 0.01f);
         _barrelTrans.LookAt(_barrelLookAtTarget);
         _barrelTrans.rotation = Quaternion.Euler(_barrelTrans.rotation.eulerAngles.x, _turretTrans.rotation.eulerAngles.y, 0);
     }

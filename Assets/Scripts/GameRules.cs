@@ -5,5 +5,5 @@ using UnityEngine;
 public static class GameRules
 {
     public static bool _drawOnGUI = true;
-    public static bool _drawOnDrawGizmos = false;
+    public static bool _drawOnDrawGizmos = true;
 }

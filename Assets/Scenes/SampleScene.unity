@@ -121,6 +121,12 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 23800000, guid: 5ab55668819febd41826ad4333758af5, type: 2}
+--- !u!4 &57082925 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 8870077681586200782, guid: 6f36ad27547546c49b9ca496f7a7523c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8870077681609729251}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &350011236
 GameObject:
   m_ObjectHideFlags: 0
@@ -1163,6 +1169,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: tank_testai
       objectReference: {fileID: 0}
+    - target: {fileID: 924456261760754487, guid: 682a766f7cde2864aa0bbc0237e3934b,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -1227,6 +1238,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 8870077680769188386, guid: 6f36ad27547546c49b9ca496f7a7523c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: faedf38db0f82bb4e8a9534fb2bfb9b7, type: 2}
+    - target: {fileID: 8870077681138819905, guid: 6f36ad27547546c49b9ca496f7a7523c,
+        type: 3}
+      propertyPath: _shootPoint
+      value: 
+      objectReference: {fileID: 57082925}
     - target: {fileID: 8870077681138819906, guid: 6f36ad27547546c49b9ca496f7a7523c,
         type: 3}
       propertyPath: m_Name
@@ -1287,5 +1308,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8870077681520621474, guid: 6f36ad27547546c49b9ca496f7a7523c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: faedf38db0f82bb4e8a9534fb2bfb9b7, type: 2}
+    - target: {fileID: 8870077681934619818, guid: 6f36ad27547546c49b9ca496f7a7523c,
+        type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: faedf38db0f82bb4e8a9534fb2bfb9b7, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 6f36ad27547546c49b9ca496f7a7523c, type: 3}

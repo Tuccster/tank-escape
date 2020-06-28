@@ -33,4 +33,9 @@ public static class Maths
             distance += Vector3.Distance(points[i], points[i + 1]);
         return distance;
     }
+
+    public static float RoundToInverval(float value, float interval)
+    {
+        return Mathf.Ceil(value / interval) * interval;
+    }
 }
