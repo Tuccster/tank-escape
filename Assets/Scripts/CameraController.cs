@@ -28,12 +28,9 @@ public class CameraController : MonoBehaviour
 
     private void LateUpdate()
     {
-        if (Input.GetKey(KeyCode.LeftShift))
-        {
-            float scrollValue = Input.GetAxis("Mouse ScrollWheel");
-            if (scrollValue > 0f) _camera.transform.position += _camera.transform.forward * 1;
-            if (scrollValue < 0f) _camera.transform.position += _camera.transform.forward * -1;
-        }
+        float scrollValue = Input.GetAxis("Mouse ScrollWheel");
+        if (scrollValue > 0f) _camera.transform.position += _camera.transform.forward * 1;
+        if (scrollValue < 0f) _camera.transform.position += _camera.transform.forward * -1;
     }
 
     public void SetTarget(Transform target)

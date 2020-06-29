@@ -10,7 +10,6 @@ public class Tank : MonoBehaviour
 
     [SerializeField]
     protected Transform _bodyTrans, _turretTrans, _barrelTrans, _shootPoint;
-    protected Transform _transform;
 
     protected NavMeshAgent _navMeshAgent;
     protected LineRenderer _lineRenderer;
@@ -27,14 +26,13 @@ public class Tank : MonoBehaviour
 
     protected virtual void Awake()
     {
-        _transform = gameObject.GetComponent<Transform>();
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _lineRenderer = gameObject.GetComponent<LineRenderer>();
     }
 
     protected virtual void Update()
     {
-        if (onRotateEvent != null) onRotateEvent(_transform.rotation);
+        if (onRotateEvent != null) onRotateEvent(transform.rotation);
     }
 
     public void MoveToPosition(Vector3 position)
@@ -44,11 +42,10 @@ public class Tank : MonoBehaviour
 
     public void AimAt(Vector3 position)
     {
-        Vector3 direction = position - _transform.position;
+        Vector3 direction = position - transform.position;
         direction.Normalize();
-        float percentage = Vector3.Distance(_transform.position + (direction * _aimDistMin), position) / _aimDistMax;
+        float percentage = Vector3.Distance(transform.position + (direction * _aimDistMin), position) / _aimDistMax;
         _vertDisplacement = Mathf.Clamp(percentage * _vertDisplacementMax, 0, _vertDisplacementMax);
-        Debug.Log(_vertDisplacement);
 
         _targetPosition = position;
         Vector3 velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
@@ -63,7 +60,7 @@ public class Tank : MonoBehaviour
 
     public void ShootProjectile()
     {
-        float distToPos = Vector3.Distance(_transform.position, _targetPosition);
+        float distToPos = Vector3.Distance(transform.position, _targetPosition);
         if (distToPos < _aimDistMin || distToPos > _aimDistMax) return;
 
         GameObject newProjectile = Instantiate(_projectile, _shootPoint.position, Quaternion.identity);
@@ -90,7 +87,7 @@ public class Tank : MonoBehaviour
         Gizmos.DrawLine(_turretTrans.position, _turretTrans.position + _turretTrans.forward);
 
         Gizmos.color = new Color(1, 0, 0, 0.2f);
-        Gizmos.DrawWireSphere(_transform.position, _aimDistMin);
-        Gizmos.DrawWireSphere(_transform.position, _aimDistMax);
+        Gizmos.DrawWireSphere(transform.position, _aimDistMin);
+        Gizmos.DrawWireSphere(transform.position, _aimDistMax);
     }
 }
