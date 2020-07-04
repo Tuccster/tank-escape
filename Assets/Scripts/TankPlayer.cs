@@ -37,7 +37,7 @@ public class TankPlayer : Tank
         if (onUpdateDebugData != null) 
             onUpdateDebugData(_navMeshAgent.velocity.magnitude, _navMeshAgent.acceleration);
 
-        if (Input.GetKeyDown(KeyCode.F)) ShootProjectile();
+        if (Input.GetKeyDown(KeyCode.F)) ShootProjectile(0.5f);
     }
 
     protected override void OnDrawGizmos()

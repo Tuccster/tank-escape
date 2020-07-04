@@ -5,12 +5,24 @@ using UnityEngine.AI;
 
 public class TankAI : Tank
 {
-    private List<IEnumerable> _taskList = new List<IEnumerable>();
-    private bool _repeatTaskList = true;
-    private bool _taskListRunning = false;
-    private bool _currentTaskRunning = false;
-    private TankPlayer _player;
-    private WaitForEndOfFrame waitForEndOfFrame;
+    public Dictionary<string, TaskList> _taskListsDict = new Dictionary<string, TaskList>();
+    public TaskList _currentTaskList = null;
+
+    public class TaskList
+    {
+        public List<IEnumerable> taskList = new List<IEnumerable>();
+        public bool taskListRunning = false;
+        public bool currentTaskRunning = false;
+        public bool repeat = false;
+
+        public TaskList(bool repeatTaskList)
+        {
+            repeat = repeatTaskList;
+        }
+    }
+
+    protected TankPlayer _player;
+    protected WaitForEndOfFrame waitForEndOfFrame;
 
     protected virtual void Start()
     {
@@ -18,59 +30,102 @@ public class TankAI : Tank
         waitForEndOfFrame = new WaitForEndOfFrame();
     }
 
-    public void AddTask(IEnumerable task, int amount = 1)
+    public TaskList CreateTaskList(string key, bool repeat)
     {
-        if (_taskListRunning)
+        if (_taskListsDict.ContainsKey(key)) return null;
+        _taskListsDict.Add(key, new TaskList(repeat));
+        return _taskListsDict[key];
+    }
+
+    public void AddTask(string taskListKey, IEnumerable task, int amount = 1)
+    {
+        if (!_taskListsDict.ContainsKey(taskListKey)) return;
+
+        if (_taskListsDict[taskListKey].taskListRunning)
         {
             Debug.LogError("Cannot add tasks while task list is running.");
             return;
         }
         for (int i = 0; i < amount; i++)
         {
-            _taskList.Add(task);
+            _taskListsDict[taskListKey].taskList.Add(task);
         }
     }
 
-    public void StartTaskList(bool repeat)
+    public void AddTask(TaskList taskList, IEnumerable task, int amount = 1)
     {
-        if (_taskList.Count == 0)
+        if (taskList.taskListRunning)
+        {
+            Debug.LogError("Cannot add tasks while task list is running.");
+            return;
+        }
+        for (int i = 0; i < amount; i++)
+        {
+            taskList.taskList.Add(task);
+        }
+    }
+
+    public void StartTaskList(string taskListKey)
+    {
+        if (_taskListsDict.ContainsKey(taskListKey))
+            _currentTaskList = _taskListsDict[taskListKey];
+        if (_currentTaskList.taskList.Count == 0)
         {
             Debug.LogWarning("Attempted to start task list while empty.");
             return;
         }
-        _repeatTaskList = repeat;
         StartCoroutine(StartTaskListCoroutine());
     }
 
     private IEnumerator StartTaskListCoroutine()
     {
-        _taskListRunning = true;
+        _currentTaskList.currentTaskRunning = true;
         bool repeat = true;
         while(repeat)
         {
-            for (int i = 0; i < _taskList.Count; i++)
+            for (int i = 0; i < _currentTaskList.taskList.Count; i++)
             {
-                _currentTaskRunning = true;
-                StartCoroutine(_taskList[i].GetEnumerator());
-                while(_currentTaskRunning)
+                _currentTaskList.currentTaskRunning = true;
+                StartCoroutine(_currentTaskList.taskList[i].GetEnumerator());
+                while(_currentTaskList.currentTaskRunning)
                     yield return waitForEndOfFrame;
             }
-            repeat = _repeatTaskList;
+            repeat = _currentTaskList.repeat;
         }
-        _taskListRunning = false;
+        _currentTaskList.currentTaskRunning = false;
     }
 
-    public IEnumerable MoveTo(Vector3 position)
+    public Vector3 GetPlayerPosition()
     {
+        return _player.transform.position;
+    }
+
+    // TASKS //
+
+    public IEnumerable MoveTo(Vector3 position, float stopWithin)
+    {
+        if (Maths.RemainingDistance(_navMeshAgent.path.corners) < stopWithin) yield break;
         MoveToPosition(position);
         yield return waitForEndOfFrame; // Needed so that remaining distance can be calculated
 
-        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= 0.25f)
+        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= stopWithin)
             yield return waitForEndOfFrame;
-        _currentTaskRunning = false;
+        _currentTaskList.currentTaskRunning = false;
     }
 
-    public IEnumerable MoveToRandom(Vector3 position, float radius)
+    public IEnumerable MoveTo(Transform trans, float stopWithin)
+    {
+        Debug.Log(trans.position);
+        MoveToPosition(trans.position);
+        //if (Maths.RemainingDistance(_navMeshAgent.path.corners) < stopWithin) yield break;
+        yield return waitForEndOfFrame; // Needed so that remaining distance can be calculated
+
+        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= stopWithin)
+            yield return waitForEndOfFrame;
+        _currentTaskList.currentTaskRunning = false;
+    }
+
+    public IEnumerable MoveToRandom(Vector3 position, float radius, float stopWithin)
     {
         Vector3 direction = position + (Random.insideUnitSphere * radius);
         NavMeshHit hit;
@@ -78,8 +133,24 @@ public class TankAI : Tank
         MoveToPosition(hit.position);
         yield return waitForEndOfFrame; // Needed so that remaining distance can be calculated
 
-        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= 0.25f)
+        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= stopWithin)
             yield return waitForEndOfFrame;
-        _currentTaskRunning = false;
+        _currentTaskList.currentTaskRunning = false;
+    }
+
+    // CONDITIONS //
+
+    public bool PlayerWithinRadius(float radius)
+    {
+        if (Vector3.Distance(_player.transform.position, transform.position) <= radius)
+            return true;
+        return false;
+    }
+
+    public bool PlayerUnobstructed(float range)
+    {
+        if (Physics.Raycast(transform.position, transform.position - _player.transform.position, range))
+            return true;
+        return false;
     }
 }

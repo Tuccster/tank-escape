@@ -21,6 +21,9 @@ public class Tank : MonoBehaviour
     private Vector3 _targetPosition;
     public float _aimDistMin, _aimDistMax;
 
+    private WaitForSeconds _fireRateWaitForSeconds;
+    private bool _fireCooldown = false;
+
     public delegate void OnRotateEvent(Quaternion rotation);
     public static event OnRotateEvent onRotateEvent;
 
@@ -58,14 +61,25 @@ public class Tank : MonoBehaviour
         _barrelTrans.rotation = Quaternion.Euler(_barrelTrans.rotation.eulerAngles.x, _turretTrans.rotation.eulerAngles.y, 0);
     }
 
-    public void ShootProjectile()
+    public void ShootProjectile(float fireRate)
     {
+        if (_fireCooldown) return;
+
         float distToPos = Vector3.Distance(transform.position, _targetPosition);
         if (distToPos < _aimDistMin || distToPos > _aimDistMax) return;
 
         GameObject newProjectile = Instantiate(_projectile, _shootPoint.position, Quaternion.identity);
         Rigidbody projRigidbody = newProjectile.GetComponent<Rigidbody>();
         projRigidbody.velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
+
+        StartCoroutine(ShootProjectileCooldown(fireRate));
+    }
+
+    private IEnumerator ShootProjectileCooldown(float fireRate)
+    {
+        _fireCooldown = true;
+        yield return new WaitForSeconds(fireRate);
+        _fireCooldown = false;
     }
 
     protected virtual void OnDrawGizmos()
