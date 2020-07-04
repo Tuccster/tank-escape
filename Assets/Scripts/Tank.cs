@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.AI;
 
 [RequireComponent(typeof(NavMeshAgent))]
-public class Tank : MonoBehaviour
+public class Tank : MonoBehaviour, IKillable
 {
     public GameObject _projectile;
 
@@ -22,15 +22,19 @@ public class Tank : MonoBehaviour
     public float _aimDistMin, _aimDistMax;
 
     private WaitForSeconds _fireRateWaitForSeconds;
+    private Coroutine _cooldownCoroutine;
     private bool _fireCooldown = false;
 
     public delegate void OnRotateEvent(Quaternion rotation);
-    public static event OnRotateEvent onRotateEvent;
+    public event OnRotateEvent onRotateEvent;
 
     protected virtual void Awake()
     {
         _navMeshAgent = gameObject.GetComponent<NavMeshAgent>();
         _lineRenderer = gameObject.GetComponent<LineRenderer>();
+
+        if (_aimDistMin == 0 || _aimDistMax == 0)
+            Debug.LogWarning("_aimDistMin or _aimDistMax is 0");
     }
 
     protected virtual void Update()
@@ -63,23 +67,29 @@ public class Tank : MonoBehaviour
 
     public void ShootProjectile(float fireRate)
     {
-        if (_fireCooldown) return;
+        if (!_fireCooldown)
+        {
+            _fireCooldown = true;
+            StartCoroutine(ShootProjectileCooldown(fireRate));
+        }
+    }
 
+    private IEnumerator ShootProjectileCooldown(float fireRate)
+    {
         float distToPos = Vector3.Distance(transform.position, _targetPosition);
-        if (distToPos < _aimDistMin || distToPos > _aimDistMax) return;
+        if (distToPos < _aimDistMin || distToPos > _aimDistMax) yield break;
 
         GameObject newProjectile = Instantiate(_projectile, _shootPoint.position, Quaternion.identity);
         Rigidbody projRigidbody = newProjectile.GetComponent<Rigidbody>();
         projRigidbody.velocity = Maths.CalculateProjectileVelocity(_shootPoint.position, _targetPosition, _vertDisplacement);
 
-        StartCoroutine(ShootProjectileCooldown(fireRate));
-    }
-
-    private IEnumerator ShootProjectileCooldown(float fireRate)
-    {
-        _fireCooldown = true;
         yield return new WaitForSeconds(fireRate);
         _fireCooldown = false;
+    }
+
+    public virtual void Kill()
+    {
+        Destroy(gameObject);
     }
 
     protected virtual void OnDrawGizmos()

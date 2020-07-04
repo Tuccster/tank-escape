@@ -14,7 +14,7 @@ public class GameSetup : MonoBehaviour
             TankPlayer tankPlayer = Registry.GetRegister<TankPlayer>("player");
             CameraController cameraController = Registry.GetRegister<CameraController>("camera_controller");
             cameraController.SetTarget(tankPlayer.GetComponent<Transform>());
-            TankPlayer.onRotateEvent += cameraController.SetRotation;
+            tankPlayer.onRotateEvent += cameraController.SetRotation;
         }
     }
 }

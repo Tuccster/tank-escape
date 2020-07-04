@@ -11,20 +11,17 @@ public class TankAIDebug : TankAI, IRobot
         _navMeshAgent.speed = 2.2f;
 
         TaskList taskList = CreateTaskList("move_to_player", true);
-        //AddTask(taskList, MoveTo(_player.transform.position, 0.25f), 1);
-        AddTask(taskList, MoveTo(_player.transform, 1), 1);
-        //AddTask(taskList, MoveToRandom(Vector3.zero, 4));
+        AddTask(taskList, MoveTo(_player.transform, 3), 1);
 
         StartCoroutine(AIBehaviour());
     }
 
     private IEnumerator AIBehaviour()
     {
-        //StartCoroutine(MoveTo(_player.transform.position).GetEnumerator());
         StartTaskList("move_to_player");
         while (true) 
         {
-            if (PlayerWithinRadius(8) && PlayerUnobstructed(8))
+            if (PlayerWithinRadius(100) && PlayerUnobstructed(100))
             {
                 AimAt(_player.transform.position);
                 ShootProjectile(0.5f);
@@ -35,6 +32,5 @@ public class TankAIDebug : TankAI, IRobot
             }
             yield return waitForEndOfFrame;
         }
-
     }
 }

@@ -14,6 +14,8 @@ public class Projectile : MonoBehaviour
 
     private void OnCollisionEnter(Collision col)
     {
+        if (col.transform.GetComponent<IKillable>() != null)
+            col.transform.GetComponent<IKillable>().Kill();
         Destroy(gameObject);
     }
 

@@ -6,3 +6,8 @@ public interface IRobot
 {
     
 }
+
+public interface IKillable
+{
+    void Kill();
+}

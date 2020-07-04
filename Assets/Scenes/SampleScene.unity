@@ -1031,6 +1031,39 @@ Transform:
   m_Father: {fileID: 2036017994}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 45.000004, y: 0, z: 0}
+--- !u!1 &1129718064 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8870077681138819906, guid: 6f36ad27547546c49b9ca496f7a7523c,
+    type: 3}
+  m_PrefabInstance: {fileID: 8870077681609729251}
+  m_PrefabAsset: {fileID: 0}
+--- !u!136 &1129718065
+CapsuleCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129718064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  m_Radius: 0.3
+  m_Height: 1
+  m_Direction: 1
+  m_Center: {x: 0, y: 0.22, z: 0}
+--- !u!65 &1129718066
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129718064}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 1, y: 0.4, z: 1}
+  m_Center: {x: 0, y: 0.2, z: 0}
 --- !u!1 &1172824540
 GameObject:
   m_ObjectHideFlags: 0
@@ -1622,80 +1655,92 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1001 &2489023275261893991
+--- !u!1001 &6747762912616003547
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
-    - target: {fileID: 924456261760754487, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 556467554, guid: 4ec43d2b769a7e747ba6fdc68192d273, type: 3}
+      propertyPath: _projectile
+      value: 
+      objectReference: {fileID: 9153276961506750070, guid: a317e815babf95f43b54d52ad2687266,
         type: 3}
-      propertyPath: m_Name
-      value: tank_testai
-      objectReference: {fileID: 0}
-    - target: {fileID: 924456261760754487, guid: 682a766f7cde2864aa0bbc0237e3934b,
-        type: 3}
-      propertyPath: m_IsActive
+    - target: {fileID: 556467554, guid: 4ec43d2b769a7e747ba6fdc68192d273, type: 3}
+      propertyPath: _aimDistMin
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 556467554, guid: 4ec43d2b769a7e747ba6fdc68192d273, type: 3}
+      propertyPath: _aimDistMax
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 556467554, guid: 4ec43d2b769a7e747ba6fdc68192d273, type: 3}
+      propertyPath: _fireRate
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalPosition.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalPosition.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalPosition.z
       value: 4
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalRotation.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalRotation.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalRotation.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalRotation.w
       value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_RootOrder
       value: 7
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9091529012751390954, guid: 682a766f7cde2864aa0bbc0237e3934b,
+    - target: {fileID: 73621729902490198, guid: 4ec43d2b769a7e747ba6fdc68192d273,
         type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8357066788286007691, guid: 4ec43d2b769a7e747ba6fdc68192d273,
+        type: 3}
+      propertyPath: m_Name
+      value: tank_turret
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 682a766f7cde2864aa0bbc0237e3934b, type: 3}
+  m_SourcePrefab: {fileID: 100100000, guid: 4ec43d2b769a7e747ba6fdc68192d273, type: 3}
 --- !u!1001 &8870077681609729251
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1717,6 +1762,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: tank_player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8870077681138819906, guid: 6f36ad27547546c49b9ca496f7a7523c,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8870077681138819911, guid: 6f36ad27547546c49b9ca496f7a7523c,
         type: 3}

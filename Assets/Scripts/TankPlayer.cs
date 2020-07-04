@@ -40,6 +40,13 @@ public class TankPlayer : Tank
         if (Input.GetKeyDown(KeyCode.F)) ShootProjectile(0.5f);
     }
 
+    public override void Kill()
+    {
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
+        transform.position = Vector3.zero;
+    }
+
     protected override void OnDrawGizmos()
     {
         if (!GameRules._drawOnDrawGizmos) return;

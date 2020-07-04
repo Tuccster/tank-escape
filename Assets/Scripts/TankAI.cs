@@ -95,11 +95,6 @@ public class TankAI : Tank
         _currentTaskList.currentTaskRunning = false;
     }
 
-    public Vector3 GetPlayerPosition()
-    {
-        return _player.transform.position;
-    }
-
     // TASKS //
 
     public IEnumerable MoveTo(Vector3 position, float stopWithin)
@@ -115,13 +110,16 @@ public class TankAI : Tank
 
     public IEnumerable MoveTo(Transform trans, float stopWithin)
     {
-        Debug.Log(trans.position);
-        MoveToPosition(trans.position);
-        //if (Maths.RemainingDistance(_navMeshAgent.path.corners) < stopWithin) yield break;
         yield return waitForEndOfFrame; // Needed so that remaining distance can be calculated
 
-        while(Maths.RemainingDistance(_navMeshAgent.path.corners) >= stopWithin)
+        while(Vector3.Distance(transform.position, trans.position) >= stopWithin)
+        {
             yield return waitForEndOfFrame;
+            MoveToPosition(trans.position);
+        }
+
+        _navMeshAgent.isStopped = true;
+        _navMeshAgent.ResetPath();
         _currentTaskList.currentTaskRunning = false;
     }
 
