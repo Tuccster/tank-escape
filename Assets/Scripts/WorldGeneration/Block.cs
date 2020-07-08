@@ -4,6 +4,6 @@ using UnityEngine;
 
 public class Block
 {
-    public bool _active;
-    public byte[] _textures = new byte[6];
+    public bool active;
+    public byte[] textures = new byte[6];
 }

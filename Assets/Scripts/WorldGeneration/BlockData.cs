@@ -4,6 +4,8 @@ using UnityEngine;
 
 public static class BlockData
 {
+    public static byte hunkSize = 10;
+
     public static readonly Vector3[] vertices = {
 		new Vector3 (0, 0, 0),
 		new Vector3 (1, 0, 0),
@@ -32,13 +34,12 @@ public static class BlockData
 
     public static readonly Vector3[] faceChecks = {
 
-		new Vector3(0, 0, -1),
-		new Vector3(0, 0, 1),
-		new Vector3(0, 1, 0),
-		new Vector3(0, -1, 0),
-		new Vector3(-1, 0, 0),
-		new Vector3(1, 0, 0)
-
+        new Vector3(0, 0, 1),  // front
+        new Vector3(0, 1, 0),  // top
+        new Vector3(1, 0, 0),  // right?
+        new Vector3(-1, 0, 0), // left?
+        new Vector3(0, 0, -1), // back
+        new Vector3(0, -1, 0)  // bottom
 	};
 
 	public static readonly Vector2[] uvs = {
